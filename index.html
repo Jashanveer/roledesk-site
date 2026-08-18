@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="RoleDesk is a local macOS app that runs the routine parts of a deliberate job search: discovery, tailored documents, rehearsed applications, outreach, and replies, with every consequential decision left to you.">
+  <meta name="theme-color" content="#faf6ef">
+  <meta property="og:title" content="RoleDesk: the job search, run like a pipeline you direct.">
+  <meta property="og:description" content="One local pipeline for the work around the work. No account, no server in the data path, a hard daily AI budget.">
+  <title>RoleDesk | Move the search forward</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap">
+  <link rel="preload" href="./assets/macbook-closed-top-alt.png" as="image">
+  <script defer src="./vendor/gsap.min.js"></script>
+  <script defer src="./vendor/ScrollTrigger.min.js"></script>
+  <style>
+    /* ============================================================
+       RoleDesk marketing site v2 · Workshop Log theme
+       Light, single-theme page with ONE deliberate dark act
+       (.control). Motion is progressive enhancement: nothing is
+       hidden by CSS; GSAP sets initial states only when it runs.
+       ============================================================ */
+    :root {
+      color-scheme: light;
+      --paper: #faf6ef;
+      --paper-2: #f3eee2;
+      --paper-3: #ece5d6;
+      --ink: #191511;
+      --ink-soft: #554e45;
+      --ink-faint: #746b60;
+      --red: #c43d1b;
+      --red-deep: #8f2a10;
+      --red-wash: #f6e3da;
+      --ok: #5c7034;
+      --line: rgba(25,21,17,.12);
+      --line-strong: rgba(25,21,17,.24);
+      --shadow: rgba(25,21,17,.16);
+      --night: #171310;
+      --night-2: #211c17;
+      --night-ink: #f2ebdf;
+      --night-soft: rgba(242,235,223,.66);
+      --night-line: rgba(242,235,223,.16);
+      --night-red: #e9603a;
+      --sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+      --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --page: min(92vw, 1440px);
+      --nav-h: 70px;
+      --r-surface: 10px;
+      --r-control: 8px;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{background:var(--paper)}
+    body{
+      margin:0;min-width:320px;overflow-x:clip;
+      background:var(--paper);color:var(--ink);
+      font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    }
+    body::after{
+      content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.035;mix-blend-mode:multiply;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    }
+    img{display:block;max-width:100%}
+    figure{margin:0}
+    button,input{font:inherit}
+    a{color:inherit;text-decoration:none}
+    p,h1,h2,h3,h4{margin:0}
+    p{color:var(--ink-soft);font-size:clamp(1rem,1.2vw,1.14rem);line-height:1.6;max-width:62ch}
+    :focus-visible{outline:3px solid var(--red);outline-offset:4px}
+    ::selection{background:var(--red-wash);color:var(--ink)}
+    .skip{position:fixed;top:.75rem;left:.75rem;z-index:100;padding:.75rem 1rem;transform:translateY(-180%);background:var(--ink);color:var(--paper);border-radius:var(--r-control);transition:transform 180ms var(--ease)}
+    .skip:focus{transform:translateY(0)}
+    .wrap{width:var(--page);margin-inline:auto}
+
+    /* ---------- header ---------- */
+    .site-header{position:fixed;top:0;left:0;z-index:50;width:100%;border-bottom:1px solid var(--line);background:rgba(250,246,239,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;min-height:var(--nav-h);gap:2rem}
+    .brand{display:inline-flex;align-items:center;gap:.72rem;font-size:.98rem;font-weight:700;letter-spacing:-.02em}
+    .brand img{width:32px;height:32px;border:1px solid var(--line-strong);border-radius:8px}
+    .site-nav{display:flex;align-items:center;gap:clamp(1rem,2.6vw,2.4rem);font-size:.85rem;font-weight:600}
+    .site-nav>a:not(.button){color:var(--ink-soft);transition:color 180ms var(--ease)}
+    .site-nav>a:not(.button):hover{color:var(--ink)}
+
+    .button{
+      display:inline-flex;align-items:center;justify-content:center;min-height:48px;
+      padding:.8rem 1.3rem;border:1px solid var(--line-strong);border-radius:var(--r-control);
+      background:transparent;color:var(--ink);font-size:.88rem;font-weight:700;line-height:1;white-space:nowrap;cursor:pointer;
+      transition:transform 200ms var(--ease),background 200ms var(--ease),border-color 200ms var(--ease),box-shadow 200ms var(--ease);
+    }
+    .button:hover{border-color:var(--ink-faint);background:var(--paper-2)}
+    .button:active{transform:translateY(1px) scale(.99)}
+    .button-primary{border-color:var(--red);background:var(--red);color:#faf6ef;box-shadow:0 10px 24px -14px rgba(143,42,16,.7)}
+    .button-primary:hover{border-color:var(--red-deep);background:var(--red-deep)}
+    .arrow{margin-left:.6rem;transition:transform 200ms var(--ease)}
+    .button:hover .arrow{transform:translate(2px,-2px)}
+
+    /* ---------- display type + split-text ---------- */
+    .display{font-family:var(--serif);font-weight:400;letter-spacing:-.04em;line-height:.98}
+    .display em{color:var(--red);font-style:italic}
+    .w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .08em .14em;margin:0 -.08em -.14em}
+    .wi{display:inline-block;will-change:transform}
+    .w.acc .wi{color:var(--red);font-style:italic}
+    .control .w.acc .wi{color:var(--night-red)}
+
+    /* ============================================================
+       ACT I · HERO
+       ============================================================ */
+    .hero{position:relative;padding-top:var(--nav-h)}
+    .hero-pin{display:flex;flex-direction:column;justify-content:center;min-height:calc(100dvh - var(--nav-h));padding:1.5rem 0 2rem}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);align-items:center;gap:clamp(2rem,4.5vw,5rem)}
+    .hero-copy h1{font-size:clamp(3.3rem,6vw,6.4rem)}
+    .hero-lede{max-width:32rem;margin-top:1.6rem;font-size:clamp(1.02rem,1.35vw,1.22rem);line-height:1.55}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2.1rem}
+
+    .hero-stage{position:relative;min-width:0}
+    .macbook-stage{
+      --closed-alpha:0;
+      position:relative;width:100%;aspect-ratio:2499/1435;
+    }
+    /* closed top-view photo sits ABOVE the open assembly and fades out first */
+    .macbook-stage::before{
+      content:"";position:absolute;inset:0;z-index:6;pointer-events:none;
+      background:url("./assets/macbook-closed-top-alt.png") center/contain no-repeat;
+      opacity:var(--closed-alpha);will-change:opacity;
+    }
+    /* the open laptop, split at the hinge so the lid can physically rotate:
+       at rotation 0 the two clipped copies reassemble the photo exactly */
+    .mac-open{position:absolute;inset:0;z-index:2;perspective:1800px}
+    .mac-lid{
+      position:absolute;top:0;left:0;width:100%;height:91.2%;overflow:hidden;
+      transform-origin:50% 100%;will-change:transform;
+    }
+    .mac-lid .mac-frame{position:absolute;top:0;left:0;width:100%;height:auto}
+    .mac-base{position:absolute;left:0;right:0;top:91.2%;bottom:0;overflow:hidden}
+    .mac-base img{position:absolute;bottom:0;left:0;width:100%;height:auto}
+    .macbook-screen{
+      position:absolute;top:9.71%;left:12.34%;width:75.32%;height:90.02%;
+      overflow:hidden;background:var(--paper-2);
+    }
+    .hero-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;opacity:0}
+    .hero-shot.is-on{opacity:1}
+    .screen-shade{
+      position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
+      background:linear-gradient(165deg,#0b0b0e 0%,#16161b 55%,#22222a 100%);
+    }
+
+    /* ============================================================
+       ACT II · THE PILE-UP (problem)
+       ============================================================ */
+    .pileup{position:relative;border-top:1px solid var(--line)}
+    .pileup-pin{position:relative;display:flex;align-items:center;justify-content:center;min-height:100dvh;overflow:clip}
+    .pileup-head{position:relative;z-index:3;text-align:center;padding:5rem 0}
+    .pileup-head h2{font-size:clamp(3rem,6.4vw,6.8rem);max-width:14ch;margin-inline:auto}
+    .pileup-line-2{display:block;margin-top:.35em}
+    .slip{
+      position:absolute;z-index:2;width:clamp(180px,19vw,282px);
+      padding:1.15rem 1.25rem;border:1px solid var(--line-strong);border-radius:var(--r-surface);
+      background:var(--paper);box-shadow:0 24px 60px -28px var(--shadow);
+    }
+    .slip b{display:block;font-size:.95rem;letter-spacing:-.015em}
+    .slip span{display:block;margin-top:.45rem;color:var(--ink-faint);font-family:var(--mono);font-size:.72rem;line-height:1.5}
+    .slip:nth-child(1){top:9%;left:5%;transform:rotate(-6deg)}
+    .slip:nth-child(2){top:6%;right:7%;transform:rotate(5deg)}
+    .slip:nth-child(3){top:38%;left:1.5%;transform:rotate(3deg)}
+    .slip:nth-child(4){top:42%;right:2%;transform:rotate(-4deg)}
+    .slip:nth-child(5){bottom:8%;left:11%;transform:rotate(6deg)}
+    .slip:nth-child(6){bottom:6%;right:12%;transform:rotate(-5deg)}
+
+    /* ============================================================
+       ACT III · THE MARKET (sticky stack)
+       ============================================================ */
+    .market{padding:clamp(5rem,9vw,9rem) 0 0;border-top:1px solid var(--line)}
+    .market-head h2{font-size:clamp(2.9rem,5.6vw,6rem);max-width:14ch}
+    .market-head p{margin-top:1.4rem;max-width:46rem}
+    .market-stack{margin-top:clamp(3rem,6vw,5.5rem);padding-bottom:clamp(4rem,8vw,7rem)}
+    .market-card{
+      position:sticky;top:calc(var(--nav-h) + 3.5rem);
+      display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(1.5rem,4vw,4rem);
+      min-height:56vh;margin-bottom:clamp(3rem,7vw,6rem);padding:clamp(1.8rem,3.5vw,3.2rem);
+      border:1px solid var(--line-strong);border-radius:var(--r-surface);
+      background:var(--paper);box-shadow:0 30px 80px -40px var(--shadow);
+      will-change:transform;
+    }
+    .market-card:last-of-type{margin-bottom:0}
+    .market-card .display{font-size:clamp(2.1rem,3.6vw,3.6rem);max-width:12ch}
+    .market-card-no{
+      position:absolute;right:clamp(1.4rem,3vw,2.6rem);top:clamp(1rem,2.4vw,2rem);
+      font-family:var(--serif);font-size:clamp(2.6rem,4.5vw,4.5rem);color:var(--line-strong);line-height:1;
+    }
+    .market-truth{display:flex;flex-direction:column;justify-content:center;gap:1.6rem;border-left:1px solid var(--line);padding-left:clamp(1.5rem,3vw,3rem)}
+    .market-truth h4{font-family:var(--mono);font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+    .market-truth h4.catch{color:var(--red)}
+    .market-truth p{margin-top:.5rem;font-size:.98rem}
+    .market-card-good{align-self:end;max-width:30rem;margin-top:2rem;font-size:.98rem}
+    .market-pivot{padding:clamp(5rem,9vw,9rem) 0;border-top:1px solid var(--line)}
+    .market-pivot h2{font-size:clamp(2.7rem,5.2vw,5.6rem);max-width:21ch}
+
+    /* ============================================================
+       ACT IV · MEET ROLEDESK
+       ============================================================ */
+    .meet{padding:clamp(5.5rem,10vw,10rem) 0;border-top:1px solid var(--line);background:var(--paper-2)}
+    .meet-head{display:flex;align-items:flex-start;gap:clamp(1.2rem,2.5vw,2rem)}
+    .meet-head img{width:clamp(56px,5.5vw,76px);height:auto;border:1px solid var(--line-strong);border-radius:14px}
+    .meet-head h2{font-size:clamp(2.9rem,5.8vw,6.2rem);max-width:14ch}
+    .meet-head p{margin-top:1.4rem;max-width:46rem;font-size:clamp(1.02rem,1.4vw,1.2rem)}
+    .demo{margin-top:clamp(3rem,6vw,5rem)}
+    .demo-shell{overflow:hidden;border:1px solid var(--line-strong);border-radius:var(--r-surface);background:var(--paper);box-shadow:0 34px 90px -42px var(--shadow)}
+    .demo-controls{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:52px;padding:0 .8rem 0 1.1rem;border-bottom:1px solid var(--line)}
+    .demo-controls strong{font-size:.8rem;letter-spacing:-.01em}
+    .demo-tabs{display:flex;align-items:center;gap:.25rem}
+    .demo-tab{padding:.48rem .78rem;border:0;border-radius:var(--r-control);background:transparent;color:var(--ink-soft);font-size:.76rem;font-weight:600;cursor:pointer;transition:background 180ms var(--ease),color 180ms var(--ease)}
+    .demo-tab:hover{background:var(--paper-2);color:var(--ink)}
+    .demo-tab[aria-selected=true]{background:var(--red-wash);color:var(--red-deep)}
+    .demo-viewport{position:relative;overflow:hidden;aspect-ratio:1633/1024;background:var(--paper-2)}
+    .demo-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;opacity:0;visibility:hidden}
+    .demo-shot.is-active{opacity:1;visibility:visible}
+    .demo-progress{height:2px;background:var(--line)}
+    .demo-progress span{display:block;width:100%;height:100%;background:var(--red);transform:scaleX(0);transform-origin:left}
+    .demo-data{border-top:1px solid var(--line)}
+    .demo-data-panel{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:1.1rem;min-height:96px;padding:.9rem 1.1rem}
+    .demo-data-panel[hidden]{display:none}
+    .demo-data-copy strong{display:block;font-size:.86rem;letter-spacing:-.015em}
+    .demo-data-copy p{max-width:36ch;margin-top:.3rem;font-size:.76rem;line-height:1.45}
+    .demo-stats{display:grid;grid-template-columns:repeat(3,1fr);margin:0}
+    .demo-stats div{padding:.1rem .8rem;border-left:1px solid var(--line)}
+    .demo-stats dt{color:var(--ink-faint);font-size:.66rem;font-weight:600;line-height:1.3}
+    .demo-stats dd{margin:.25rem 0 0;font-family:var(--serif);font-size:1.5rem;line-height:1}
+    .demo-stats dd.text-value{font-family:var(--sans);font-size:.78rem;font-weight:700;line-height:1.3}
+    .demo-note{display:flex;justify-content:space-between;gap:1.2rem;margin-top:.8rem;color:var(--ink-faint);font-size:.78rem;line-height:1.45}
+    .demo-live{display:inline-flex;align-items:center;gap:.45rem}
+    .demo-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok)}
+    .meet-cta{display:flex;align-items:center;gap:1.4rem;margin-top:2.6rem}
+    .meet-cta p{font-size:.92rem;max-width:34ch}
+
+    /* ============================================================
+       ACT V · CHAPTERS (one job's story)
+       ============================================================ */
+    .chapters{border-top:1px solid var(--line)}
+    .chapter{position:relative;padding:clamp(5rem,9vw,8.5rem) 0;border-bottom:1px solid var(--line);overflow:clip}
+    .chapter:last-of-type{border-bottom:0}
+    .chapter-grid{position:relative;display:grid;grid-template-columns:minmax(280px,.78fr) minmax(0,1.22fr);align-items:center;gap:clamp(2.5rem,6vw,7rem)}
+    .chapter.flip .chapter-grid{grid-template-columns:minmax(0,1.22fr) minmax(280px,.78fr)}
+    .chapter.flip .chapter-copy{order:2}
+    .chapter-ghost{
+      position:absolute;z-index:0;top:-1.5rem;left:-1rem;pointer-events:none;user-select:none;
+      font-family:var(--serif);font-size:clamp(9rem,17vw,17rem);line-height:1;color:var(--ink);opacity:.055;
+    }
+    .chapter.flip .chapter-ghost{left:auto;right:-1rem}
+    .chapter-copy{position:relative;z-index:1}
+    .chapter-copy h3{font-size:clamp(2.5rem,4.4vw,4.6rem);max-width:12ch}
+    .chapter-copy>p{margin-top:1.3rem;max-width:34rem}
+    .chapter-fine{display:block;margin-top:1.3rem;max-width:34rem;color:var(--ink-faint);font-size:.82rem;line-height:1.55}
+    .chapter-visual{position:relative;z-index:1;min-width:0}
+
+    /* ch1 · brand grid */
+    .brand-field{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line-strong);border-left:1px solid var(--line-strong);border-radius:var(--r-surface);overflow:hidden}
+    .brand-node{display:grid;min-height:150px;place-items:center;align-content:center;gap:.7rem;padding:1.4rem;border-right:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);background:var(--paper);text-align:center}
+    .brand-node img{width:clamp(32px,3.6vw,46px);height:clamp(32px,3.6vw,46px);object-fit:contain}
+    .brand-node span{color:var(--ink-soft);font-size:.76rem;font-weight:600}
+    .brand-node.more{background:var(--red-wash)}
+    .brand-node.more strong{font-family:var(--serif);font-size:clamp(2rem,3.6vw,3.6rem);font-weight:400;line-height:.9;color:var(--red-deep)}
+    .brand-node.more span{color:var(--red-deep)}
+
+    /* ch2 · job sheet + diff */
+    .match-stage{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem}
+    .job-sheet{padding:clamp(1.5rem,3.4vw,2.8rem);border:1px solid var(--line-strong);border-radius:var(--r-surface);background:var(--paper);box-shadow:0 30px 70px -46px var(--shadow)}
+    .job-sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding-bottom:1.6rem;border-bottom:1px solid var(--line)}
+    .job-sheet h4{max-width:12ch;font-size:clamp(1.6rem,2.6vw,2.5rem);letter-spacing:-.04em;line-height:1.02;font-weight:600}
+    .fit-score{font-family:var(--serif);font-size:clamp(2.4rem,4.4vw,4.4rem);line-height:.85;color:var(--ink)}
+    .fit-score small{font-family:var(--mono);font-size:.7rem;color:var(--ink-faint)}
+    .evidence-check{display:flex;align-items:center;gap:.8rem;padding:.95rem 0;border-bottom:1px solid var(--line);font-size:.85rem;font-weight:600}
+    .evidence-check::before{content:"✓";display:grid;width:20px;height:20px;flex:0 0 auto;place-items:center;border:1px solid var(--ok);border-radius:4px;color:var(--ok);font-size:.68rem}
+    .diff-strip{display:grid;gap:.55rem;padding-top:1.5rem}
+    .diff-strip>span{color:var(--ink-faint);font-family:var(--mono);font-size:.72rem}
+    .diff-line{height:9px;border-radius:4px;background:rgba(25,21,17,.13);transform-origin:left}
+    .diff-line:nth-of-type(3){width:88%}
+    .diff-line:nth-of-type(5){width:72%}
+    .diff-line.changed{position:relative;background:var(--red-wash)}
+    .diff-line.changed::before{content:"";position:absolute;top:0;left:0;width:26%;height:100%;border-radius:4px;background:var(--red)}
+
+    /* ch3 · browser rehearsal (full-width family) */
+    .chapter-apply .chapter-grid{grid-template-columns:1fr}
+    .chapter-apply .chapter-copy{max-width:56rem}
+    .browser-story{margin-top:clamp(2.5rem,5vw,4rem);overflow:hidden;border:1px solid var(--line-strong);border-radius:var(--r-surface);background:var(--paper);box-shadow:0 32px 80px -48px var(--shadow)}
+    .browser-story-bar{display:flex;align-items:center;justify-content:space-between;min-height:54px;padding:0 1.1rem;border-bottom:1px solid var(--line);font-size:.78rem;font-weight:700}
+    .browser-mode{color:var(--red);font-family:var(--mono);font-size:.72rem;font-weight:600}
+    .browser-story-body{display:grid;grid-template-columns:1fr 240px;min-height:340px}
+    .form-lines{padding:clamp(1.4rem,3.4vw,2.8rem)}
+    .form-line{padding:1rem 0;border-bottom:1px solid var(--line)}
+    .form-line span{display:block;color:var(--ink-soft);font-size:.78rem;font-weight:600}
+    .browser-fill{height:7px;margin-top:.65rem;border-radius:4px;background:var(--paper-3);overflow:hidden}
+    .browser-fill i{display:block;width:var(--fill,75%);height:100%;border-radius:4px;background:var(--ink);transform-origin:left}
+    .browser-receipt{display:flex;flex-direction:column;gap:1rem;padding:1.4rem;border-left:1px solid var(--line);background:var(--paper-2)}
+    .browser-receipt>span{font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.05em;color:var(--ok)}
+    .browser-receipt>strong{font-size:.88rem;line-height:1.35}
+    .stop-button{display:grid;min-height:52px;place-items:center;margin-top:auto;border:1px solid var(--red);border-radius:var(--r-control);color:var(--red);font-family:var(--mono);font-size:.7rem;font-weight:600;text-align:center;line-height:1.4}
+    .armed-option{padding:.9rem;border-radius:var(--r-control);background:var(--ink);color:var(--paper)}
+    .armed-option span{color:rgba(250,246,239,.62);font-family:var(--mono);font-size:.66rem}
+    .armed-option strong{display:block;margin-top:.35rem;font-size:.78rem;line-height:1.35}
+
+    /* ch4 · channels */
+    .channel-map{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .channel{display:flex;flex-direction:column;min-height:300px;padding:clamp(1.3rem,2.6vw,2.1rem);border:1px solid var(--line-strong);border-radius:var(--r-surface);background:var(--paper)}
+    .channel-head{display:flex;align-items:center;gap:.85rem;padding-bottom:1.2rem;border-bottom:1px solid var(--line)}
+    .channel-head img{width:34px;height:34px;object-fit:contain}
+    .channel-head strong{font-size:.95rem}
+    .message{max-width:92%;margin-top:1.3rem;padding:.95rem 1.05rem;border-left:2px solid var(--line-strong);border-radius:0 var(--r-control) var(--r-control) 0;background:var(--paper-2);color:var(--ink-soft);font-size:.82rem;line-height:1.5}
+    .message.out{margin-left:auto;border-left-color:var(--red)}
+    .channel-status{display:inline-flex;align-items:center;gap:.5rem;margin-top:auto;padding-top:1.1rem;color:var(--ok);font-family:var(--mono);font-size:.7rem}
+
+    /* ch5 · follow-through flow */
+    .follow-stage{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch}
+    .follow-node{display:grid;min-height:220px;align-content:center;justify-items:center;gap:.4rem;padding:1.5rem;border:1px solid var(--line-strong);border-radius:var(--r-surface);background:var(--paper);text-align:center}
+    .follow-node img{width:42px;height:42px;object-fit:contain;margin-bottom:.6rem}
+    .follow-node strong{display:block;font-size:.92rem}
+    .follow-node span{display:block;max-width:20ch;color:var(--ink-faint);font-size:.76rem;line-height:1.5}
+    .follow-arrow{align-self:center;width:clamp(26px,3.4vw,54px);height:2px;background:var(--red);transform-origin:left}
+    .follow-glyph{display:grid;width:42px;height:42px;place-items:center;margin-bottom:.6rem;border:1.5px solid var(--ink);border-radius:var(--r-control);font-family:var(--serif);font-size:1.35rem}
+
+    /* ============================================================
+       ACT VI · CONTROL (the one dark act)
+       ============================================================ */
+    .control{background:var(--night);color:var(--night-ink)}
+    .control-inner{padding:clamp(5.5rem,10vw,10rem) 0}
+    .control h2{font-size:clamp(3rem,6vw,6.6rem);max-width:12ch}
+    .control h2 em{color:var(--night-red)}
+    .control-lede{margin-top:1.4rem;max-width:40rem;color:var(--night-soft);font-size:clamp(1rem,1.35vw,1.18rem)}
+    .mode-rail{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3.5vw,3.5rem);margin-top:clamp(3.5rem,7vw,6rem)}
+    .mode-rail::before{content:"";position:absolute;top:8px;left:0;right:0;height:2px;background:var(--night-line)}
+    .mode-progress{position:absolute;top:8px;left:0;width:100%;height:2px;background:var(--night-red);transform:scaleX(1);transform-origin:left}
+    .mode{position:relative;padding-top:2.4rem}
+    .mode::before{content:"";position:absolute;top:0;left:0;width:18px;height:18px;border-radius:50%;border:2px solid var(--night);background:var(--night-red);box-shadow:0 0 0 1px var(--night-line)}
+    .mode h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,2.8vw,2.8rem);letter-spacing:-.03em}
+    .mode p{max-width:26rem;margin-top:.7rem;color:var(--night-soft);font-size:.92rem}
+    .guardrails{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:clamp(3.5rem,7vw,6rem);border:1px solid var(--night-line);border-radius:var(--r-surface);overflow:hidden;background:var(--night-line)}
+    .guardrail{padding:clamp(1.6rem,3vw,2.4rem);background:var(--night-2)}
+    .guardrail strong{display:block;font-size:1.02rem;letter-spacing:-.015em}
+    .guardrail p{margin-top:.6rem;color:var(--night-soft);font-size:.88rem;max-width:44ch}
+    .guardrail .big{display:block;margin-bottom:.9rem;font-family:var(--serif);font-size:clamp(2rem,3.4vw,3.2rem);line-height:.9;color:var(--night-red)}
+
+    /* ============================================================
+       ACT VII · PROOF + honesty
+       ============================================================ */
+    .proof{padding:clamp(5rem,9vw,9rem) 0;border-top:1px solid var(--line)}
+    .proof-line{display:grid;grid-template-columns:1.15fr 1fr 1fr 1.05fr;border-top:1px solid var(--line-strong)}
+    .proof-line div{padding:2.2rem 2rem 0 0;border-right:1px solid var(--line)}
+    .proof-line div:last-child{border-right:0}
+    .proof-line div+div{padding-left:2rem}
+    .proof-line b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(3.6rem,7.5vw,7.5rem);letter-spacing:-.05em;line-height:.85}
+    .proof-line span{display:block;margin-top:1rem;color:var(--ink-soft);font-size:.85rem;line-height:1.5;max-width:24ch}
+    .proof-honesty{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;gap:clamp(2rem,5vw,5rem);margin-top:clamp(4rem,7vw,6rem);padding:clamp(2rem,4vw,3.2rem);border-radius:var(--r-surface);background:var(--red);color:#faf6ef}
+    .proof-honesty h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.8vw,3.8rem);letter-spacing:-.04em;line-height:1}
+    .proof-honesty p{color:rgba(250,246,239,.88);font-size:.98rem}
+    .proof-foot{margin-top:2rem;color:var(--ink-faint);font-size:.8rem;max-width:56ch}
+
+    /* ============================================================
+       ACT VIII · BEYOND THE QUEUE
+       ============================================================ */
+    .depth{padding:clamp(5.5rem,10vw,9rem) 0;border-top:1px solid var(--line);background:var(--paper-2)}
+    .depth-head h2{font-size:clamp(2.9rem,5.6vw,6rem);max-width:12ch}
+    .depth-head p{margin-top:1.4rem;max-width:46rem}
+    .depth-grid{display:grid;grid-template-columns:minmax(250px,.62fr) minmax(0,1.38fr);gap:clamp(2rem,5vw,4.5rem);margin-top:clamp(3rem,6vw,5rem)}
+    .depth-core{display:flex;flex-direction:column;justify-content:center;gap:1rem;min-height:300px;padding:clamp(1.8rem,3.5vw,3rem);border-radius:var(--r-surface);background:var(--red);color:#faf6ef}
+    .depth-core strong{font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,4vw,3.8rem);letter-spacing:-.04em;line-height:.95;max-width:9ch}
+    .depth-core small{max-width:26ch;color:rgba(250,246,239,.85);font-size:.85rem;line-height:1.55}
+    .depth-features{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;border:1px solid var(--line-strong);border-radius:var(--r-surface);overflow:hidden;background:var(--line-strong)}
+    .depth-feature{padding:clamp(1.4rem,2.6vw,2rem);background:var(--paper)}
+    .depth-feature h3{font-size:clamp(1.15rem,1.7vw,1.5rem);letter-spacing:-.025em;font-weight:600}
+    .depth-feature p{margin-top:.55rem;font-size:.86rem;line-height:1.55}
+    .depth-feature:last-child{display:flex;flex-direction:column;justify-content:center;background:var(--paper-2)}
+    .depth-more{display:flex;flex-wrap:wrap;gap:.55rem .5rem;margin-top:.7rem}
+    .depth-more span{padding:.34rem .6rem;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);font-size:.74rem;font-weight:600;background:var(--paper)}
+
+    /* ============================================================
+       WAITLIST + FOOTER
+       ============================================================ */
+    .waitlist{padding:clamp(6rem,11vw,11rem) 0 5rem;border-top:1px solid var(--line)}
+    .waitlist-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,.72fr);align-items:end;gap:clamp(3rem,8vw,9rem)}
+    .waitlist h2{font-size:clamp(3rem,6vw,6.4rem);max-width:10ch}
+    .waitlist-side>p{margin-bottom:1.8rem}
+    .waitlist-form{display:grid;grid-template-columns:1fr auto;gap:.65rem}
+    .field{display:grid;gap:.5rem}
+    .field label{color:var(--ink-soft);font-size:.8rem;font-weight:700}
+    .field input{width:100%;min-height:54px;padding:0 1rem;border:1px solid var(--line-strong);border-radius:var(--r-control);background:var(--paper-2);color:var(--ink);outline:none;transition:border-color 180ms var(--ease),background 180ms var(--ease)}
+    .field input::placeholder{color:var(--ink-faint)}
+    .field input:focus{border-color:var(--red);background:var(--paper-3)}
+    .field input[aria-invalid=true]{border-color:var(--red)}
+    .waitlist-form .button{align-self:end;min-height:54px}
+    .form-message{min-height:1.5rem;margin-top:.8rem;color:var(--ink-soft);font-size:.82rem}
+    .form-message[data-state=error]{color:var(--red-deep)}
+    .privacy-note{margin-top:1.1rem;color:var(--ink-faint);font-size:.8rem}
+    footer{border-top:1px solid var(--line)}
+    .footer-inner{display:flex;align-items:center;justify-content:space-between;min-height:100px;gap:2rem}
+    .footer-inner small{color:var(--ink-faint);font-size:.78rem;text-align:right;line-height:1.5}
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media(max-width:1080px){
+      .hero-grid{grid-template-columns:1fr;gap:2.5rem}
+      .hero-copy h1{font-size:clamp(3.1rem,9vw,5.4rem)}
+      .hero-stage{max-width:860px}
+      .pileup-pin{flex-direction:column;justify-content:flex-start;min-height:0;padding:4.5rem 0}
+      .pileup-head{padding:0 0 2rem}
+      .pileup-slips{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:.8rem;width:var(--page);margin:1rem auto 0}
+      .slip{position:static;width:auto;transform:none!important}
+      .market-card{grid-template-columns:1fr;min-height:0}
+      .market-truth{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:1.5rem}
+      .market-card-good{margin-top:1rem}
+      .chapter-grid,.chapter.flip .chapter-grid{grid-template-columns:1fr}
+      .chapter.flip .chapter-copy{order:0}
+      .depth-grid{grid-template-columns:1fr}
+      .depth-core{min-height:200px}
+      .proof-line{grid-template-columns:1fr 1fr}
+      .proof-line div{border-right:0;border-bottom:1px solid var(--line);padding:1.6rem 0}
+      .proof-line div+div{padding-left:0}
+      .proof-line div:nth-child(odd){padding-right:1.6rem;border-right:1px solid var(--line)}
+      .proof-line div:nth-child(even){padding-left:1.6rem}
+      .proof-honesty{grid-template-columns:1fr}
+    }
+    @media(max-width:760px){
+      :root{--page:min(91vw,680px);--nav-h:62px}
+      .site-nav>a:not(.button){display:none}
+      .site-nav .button{min-height:42px;padding-inline:.9rem;font-size:.8rem}
+      .hero-pin{min-height:0;padding:2.5rem 0 2rem}
+      .hero-actions .button{flex:1 1 auto}
+      .pileup-slips{grid-template-columns:1fr}
+      .market-card{position:static;padding:1.4rem}
+      .market-card-no{position:static;order:-1;margin-bottom:.4rem}
+      .demo-data-panel{grid-template-columns:1fr;gap:.6rem}
+      .demo-data-copy p{display:none}
+      .demo-stats div{padding-inline:.5rem}
+      .demo-stats div:first-child{border-left:0;padding-left:0}
+      .demo-note span:last-child{display:none}
+      .meet-cta{flex-direction:column;align-items:flex-start}
+      .brand-field{grid-template-columns:repeat(2,1fr)}
+      .brand-node{min-height:112px;padding:1rem}
+      .browser-story-body{grid-template-columns:1fr}
+      .browser-receipt{border-left:0;border-top:1px solid var(--line)}
+      .channel-map{grid-template-columns:1fr}
+      .channel{min-height:0}
+      .follow-stage{grid-template-columns:1fr}
+      .follow-arrow{width:2px;height:30px;margin:.2rem auto}
+      .mode-rail{grid-template-columns:1fr;gap:2rem}
+      .mode-rail::before,.mode-progress{top:0;bottom:0;left:8px;width:2px;height:auto}
+      .mode-progress{transform:scaleY(1);transform-origin:top}
+      .mode{padding-top:0;padding-left:2.4rem}
+      .mode::before{top:2px}
+      .guardrails{grid-template-columns:1fr}
+      .depth-features{grid-template-columns:1fr}
+      .proof-line{grid-template-columns:1fr}
+      .proof-line div:nth-child(odd){border-right:0;padding-right:0}
+      .proof-line div:nth-child(even){padding-left:0}
+      .waitlist-grid{grid-template-columns:1fr}
+      .waitlist-form{grid-template-columns:1fr}
+      .footer-inner{flex-direction:column;align-items:flex-start;justify-content:center;padding-block:1.5rem}
+      .footer-inner small{text-align:left}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+    }
+    @media(prefers-reduced-transparency:reduce){
+      .site-header{background:var(--paper);backdrop-filter:none;-webkit-backdrop-filter:none}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top" aria-label="RoleDesk home"><img src="./assets/roledesk-app-icon.png" width="32" height="32" alt=""><span>RoleDesk</span></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#story-start">The story</a>
+        <a href="#story-flow">How it works</a>
+        <a href="#ownership-control">Your control</a>
+        <a class="button button-primary" href="#waitlist">Join waitlist <span class="arrow" aria-hidden="true">&#8599;</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ACT I · HERO -->
+    <section class="hero" id="top">
+      <div class="hero-pin">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <h1 class="display" data-split>Job searching became <em>the job.</em></h1>
+            <p class="hero-lede">A macOS workshop that runs the routine parts of your search and keeps every consequential decision yours.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#waitlist">Join waitlist <span class="arrow" aria-hidden="true">&#8599;</span></a>
+              <a class="button" href="#story-flow">See how it works</a>
+            </div>
+          </div>
+          <div class="hero-stage">
+            <div class="macbook-stage" role="img" aria-label="A MacBook opening to reveal the RoleDesk app, cycling through its Discover, Queue, and Apply screens">
+              <div class="mac-open">
+                <div class="mac-lid">
+                  <img class="mac-frame" src="./assets/macbook-real.png" width="2499" height="1435" alt="">
+                  <div class="macbook-screen">
+                    <img class="hero-shot is-on" src="./assets/roledesk-demo-discover-fullscreen.png" width="1633" height="1024" alt="">
+                    <img class="hero-shot" src="./assets/roledesk-demo-queue-fullscreen.png" width="1633" height="1024" alt="" loading="lazy">
+                    <img class="hero-shot" src="./assets/roledesk-demo-apply-fullscreen.png" width="1633" height="1024" alt="" loading="lazy">
+                    <div class="screen-shade" aria-hidden="true"></div>
+                  </div>
+                </div>
+                <div class="mac-base"><img src="./assets/macbook-real.png" width="2499" height="1435" alt=""></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT II · THE PILE-UP -->
+    <section class="pileup" id="story-start" aria-label="The problem: the busywork around one promising job">
+      <div class="pileup-pin">
+        <div class="wrap">
+          <div class="pileup-head">
+            <h2 class="display"><span data-split>A promising job appears.</span> <span class="pileup-line-2" data-split>Then the <em>busywork</em> begins.</span></h2>
+          </div>
+        </div>
+        <div class="pileup-slips" aria-hidden="true">
+          <div class="slip" data-rot="-6"><b>Search twelve boards</b><span>same roles, different tabs</span></div>
+          <div class="slip" data-rot="5"><b>Rewrite the resume. Again.</b><span>one bullet at a time</span></div>
+          <div class="slip" data-rot="3"><b>Re-enter the same answers</b><span>every form, from scratch</span></div>
+          <div class="slip" data-rot="-4"><b>Hunt for the recruiter</b><span>then guess their email</span></div>
+          <div class="slip" data-rot="6"><b>Watch five inboxes</b><span>and miss the one reply</span></div>
+          <div class="slip" data-rot="-5"><b>Track every deadline</b><span>assessments, interviews, offers</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT III · THE MARKET -->
+    <section class="market" id="market" aria-label="What the market offers today">
+      <div class="wrap market-head">
+        <h2 class="display" data-split>You can hire help. Each kind solves one slice.</h2>
+        <p>Trackers, volume appliers, staffing firms: all real options, all honest tradeoffs. Most leave you stitching the workflow back together yourself.</p>
+      </div>
+      <div class="wrap market-stack">
+        <article class="market-card">
+          <span class="market-card-no" aria-hidden="true">1</span>
+          <div>
+            <h3 class="display">Trackers and AI copilots</h3>
+            <p class="market-card-good">Good for organizing the search and drafting documents when you ask.</p>
+          </div>
+          <div class="market-truth">
+            <div><h4>What they give you</h4><p>A tidy board of saved jobs and better first drafts.</p></div>
+            <div><h4 class="catch">Where they stop</h4><p>At the browser tab. Forms, outreach, replies, and follow-up stay separate manual work.</p></div>
+          </div>
+        </article>
+        <article class="market-card">
+          <span class="market-card-no" aria-hidden="true">2</span>
+          <div>
+            <h3 class="display">High-volume AI appliers</h3>
+            <p class="market-card-good">Good when raw application count is the goal.</p>
+          </div>
+          <div class="market-truth">
+            <div><h4>What they give you</h4><p>Hundreds of submissions from one broad profile.</p></div>
+            <div><h4 class="catch">Where they stop</h4><p>Per-job evidence, visible receipts, and fine-grained control vary widely. You often can't see what was said in your name.</p></div>
+          </div>
+        </article>
+        <article class="market-card">
+          <span class="market-card-no" aria-hidden="true">3</span>
+          <div>
+            <h3 class="display">Staffing firms</h3>
+            <p class="market-card-good">Good when you want a human intermediary working the phones.</p>
+          </div>
+          <div class="market-truth">
+            <div><h4>What they give you</h4><p>A person with relationships and time you don't have.</p></div>
+            <div><h4 class="catch">Where they stop</h4><p>Higher cost, less control over targeting and voice, and a record of your search that lives outside your hands.</p></div>
+          </div>
+        </article>
+      </div>
+      <div class="wrap market-pivot">
+        <h2 class="display" data-split>The missing piece is not more volume. It is one connected system <em>you direct.</em></h2>
+      </div>
+    </section>
+
+    <!-- ACT IV · MEET ROLEDESK -->
+    <section class="meet" id="solution">
+      <div class="wrap">
+        <div class="meet-head">
+          <img src="./assets/roledesk-app-icon.png" width="76" height="76" alt="">
+          <div>
+            <h2 class="display" data-split>Meet RoleDesk. One local pipeline for the work <em>around</em> the work.</h2>
+            <p>Discovery, grounded documents, rehearsed applications, verified outreach, and reply handling run as one pipeline on your Mac. The routine moves forward; the decisions come back to you.</p>
+          </div>
+        </div>
+        <figure class="demo" aria-label="Interactive demo of the real RoleDesk macOS app">
+          <div class="demo-shell">
+            <div class="demo-controls">
+              <strong>The actual app</strong>
+              <div class="demo-tabs" role="tablist" aria-label="RoleDesk demo screens">
+                <button class="demo-tab" type="button" role="tab" id="demo-tab-0" aria-controls="demo-panel-0" aria-selected="true" data-demo-index="0">Discover</button>
+                <button class="demo-tab" type="button" role="tab" id="demo-tab-1" aria-controls="demo-panel-1" aria-selected="false" tabindex="-1" data-demo-index="1">Queue</button>
+                <button class="demo-tab" type="button" role="tab" id="demo-tab-2" aria-controls="demo-panel-2" aria-selected="false" tabindex="-1" data-demo-index="2">Apply</button>
+              </div>
+            </div>
+            <div class="demo-viewport">
+              <img class="demo-shot is-active" src="./assets/roledesk-demo-discover-fullscreen.png" width="1633" height="1024" alt="RoleDesk Discover screen showing configured sources and results from a completed discovery run">
+              <img class="demo-shot" src="./assets/roledesk-demo-queue-fullscreen.png" width="1633" height="1024" alt="RoleDesk Queue screen showing matched jobs ready for review and preparation" loading="lazy">
+              <img class="demo-shot" src="./assets/roledesk-demo-apply-fullscreen.png" width="1633" height="1024" alt="RoleDesk Apply screen showing prepared applications awaiting a deliberate final check" loading="lazy">
+            </div>
+            <div class="demo-progress" aria-hidden="true"><span></span></div>
+            <div class="demo-data">
+              <div class="demo-data-panel" role="tabpanel" id="demo-panel-0" aria-labelledby="demo-tab-0" data-demo-panel="0">
+                <div class="demo-data-copy"><strong>Find fresh roles across your sources.</strong><p>RoleDesk gathers openings, matches them to your evidence, and sends worthwhile results to Queue.</p></div>
+                <dl class="demo-stats"><div><dt>Sources configured</dt><dd>164</dd></div><div><dt>Jobs matched</dt><dd>220</dd></div><div><dt>New jobs</dt><dd>80</dd></div></dl>
+              </div>
+              <div class="demo-data-panel" role="tabpanel" id="demo-panel-1" aria-labelledby="demo-tab-1" data-demo-panel="1" hidden>
+                <div class="demo-data-copy"><strong>Decide what deserves preparation.</strong><p>Search the ranked queue, inspect fit scores, and prepare the strongest jobs in controlled batches.</p></div>
+                <dl class="demo-stats"><div><dt>Apply ready</dt><dd>167</dd></div><div><dt>Prep batch</dt><dd>20</dd></div><div><dt>Decision</dt><dd class="text-value">Yours</dd></div></dl>
+              </div>
+              <div class="demo-data-panel" role="tabpanel" id="demo-panel-2" aria-labelledby="demo-tab-2" data-demo-panel="2" hidden>
+                <div class="demo-data-copy"><strong>Review before anything is submitted.</strong><p>Prepared applications stay visible with their source, fit score, and outreach state before the final action.</p></div>
+                <dl class="demo-stats"><div><dt>Ready</dt><dd>167</dd></div><div><dt>Awaiting confirmation</dt><dd>9</dd></div><div><dt>Final check</dt><dd class="text-value">Manual</dd></div></dl>
+              </div>
+            </div>
+          </div>
+          <figcaption class="demo-note"><span class="demo-live">Captured from the running macOS app</span><span>Discover, review, prepare</span></figcaption>
+        </figure>
+        <div class="meet-cta">
+          <a class="button button-primary" href="#waitlist">Join waitlist <span class="arrow" aria-hidden="true">&#8599;</span></a>
+          <p>Don't let your Mac sit idle. Early access on macOS: no account, no server in the data path.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT V · CHAPTERS -->
+    <section class="chapters" id="story-flow" aria-label="How RoleDesk moves one job through the search">
+
+      <article class="chapter" data-chapter>
+        <div class="wrap chapter-grid">
+          <span class="chapter-ghost" aria-hidden="true">1</span>
+          <div class="chapter-copy">
+            <h3 class="display" data-split>The search comes to you.</h3>
+            <p>28 source modules watch job boards and company ATS feeds, remove duplicates, screen for legitimacy, and match each opening against your actual resume.</p>
+            <span class="chapter-fine">Discovery widens as your skills inventory fills in during setup, so breadth never comes at the cost of relevance.</span>
+          </div>
+          <div class="chapter-visual brand-field">
+            <div class="brand-node"><img src="./brands/linkedin.svg" alt=""><span>LinkedIn</span></div>
+            <div class="brand-node"><img src="./brands/indeed.svg" alt=""><span>Indeed</span></div>
+            <div class="brand-node"><img src="./brands/glassdoor.svg" alt=""><span>Glassdoor</span></div>
+            <div class="brand-node"><img src="./brands/wellfound.svg" alt=""><span>Wellfound</span></div>
+            <div class="brand-node"><img src="./brands/greenhouse.svg" alt=""><span>Greenhouse</span></div>
+            <div class="brand-node"><img src="./brands/google.svg" alt=""><span>Google Jobs</span></div>
+            <div class="brand-node more"><strong data-count data-count-to="28">28</strong><span>source modules in all</span></div>
+            <div class="brand-node"><img src="./assets/roledesk-app-icon.png" alt="" width="46" height="46"><span>One queue</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter flip" data-chapter>
+        <div class="wrap chapter-grid">
+          <span class="chapter-ghost" aria-hidden="true">2</span>
+          <div class="chapter-copy">
+            <h3 class="display" data-split>One role earns a closer look.</h3>
+            <p>Fit is scored against your resume, never a generic profile. The strongest evidence becomes a tailored PDF and cover letter, grounded by an evidence ledger that blocks invented employers, dates, and metrics from reaching your documents.</p>
+            <span class="chapter-fine">You see the bullet-level diff of what tailoring changed before any document moves forward.</span>
+          </div>
+          <div class="chapter-visual match-stage">
+            <div class="job-sheet">
+              <div class="job-sheet-head">
+                <h4>Senior Product Designer</h4>
+                <div class="fit-score"><span data-count data-count-to="92">92</span><small>/100</small></div>
+              </div>
+              <div class="evidence-check">Product strategy backed by experience</div>
+              <div class="evidence-check">Design systems evidence found</div>
+              <div class="evidence-check">Location and salary align</div>
+              <div class="diff-strip">
+                <span>resume diff · 2 lines changed</span>
+                <div class="diff-line"></div>
+                <div class="diff-line changed"></div>
+                <div class="diff-line"></div>
+                <div class="diff-line changed"></div>
+                <div class="diff-line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter chapter-apply" data-chapter>
+        <div class="wrap chapter-grid">
+          <span class="chapter-ghost" aria-hidden="true">3</span>
+          <div class="chapter-copy">
+            <h3 class="display" data-split>The form fills itself. You choose how far it goes.</h3>
+            <p>Real browser flows drive 16 supported ATS systems. Rehearsal walks the entire real form, reads every field back to verify it landed, and stops where Submit first appears, leaving a receipt. Armed mode can finish the click for approved jobs, and it always expires on a timer.</p>
+            <span class="chapter-fine">Captchas escalate to you. Identity, EEO, and work-authorization questions without an answer in your profile are left blank and flagged, never guessed.</span>
+          </div>
+        </div>
+        <div class="wrap">
+          <div class="chapter-visual browser-story">
+            <div class="browser-story-bar"><span>Application rehearsal</span><span class="browser-mode">MODE: YOURS TO SET</span></div>
+            <div class="browser-story-body">
+              <div class="form-lines">
+                <div class="form-line"><span>Name and contact</span><div class="browser-fill" style="--fill:91%"><i></i></div></div>
+                <div class="form-line"><span>Work history</span><div class="browser-fill" style="--fill:76%"><i></i></div></div>
+                <div class="form-line"><span>Resume upload</span><div class="browser-fill" style="--fill:64%"><i></i></div></div>
+                <div class="form-line"><span>Screening answers</span><div class="browser-fill" style="--fill:84%"><i></i></div></div>
+              </div>
+              <aside class="browser-receipt">
+                <span>READBACK VERIFIED</span>
+                <strong>Every filled field is read back and recorded in a receipt.</strong>
+                <div class="stop-button">REHEARSAL<br>STOPS HERE</div>
+                <div class="armed-option"><span>ARMED MODE</span><strong>Approved jobs can submit. Arming expires on its own.</strong></div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter" data-chapter>
+        <div class="wrap chapter-grid">
+          <span class="chapter-ghost" aria-hidden="true">4</span>
+          <div class="chapter-copy">
+            <h3 class="display" data-split>Then it finds the humans.</h3>
+            <p>RoleDesk looks for the relevant recruiter or teammate, checks for warm paths you already have, proves an email address is deliverable before anything sends, and drafts a short note in your voice, from your own accounts.</p>
+            <span class="chapter-fine">Email and LinkedIn are separate, revocable permissions. LinkedIn actions are capped and paced by default; no automation on that platform is risk-free, so the caps stay conservative.</span>
+          </div>
+          <div class="chapter-visual channel-map">
+            <div class="channel">
+              <div class="channel-head"><img src="./brands/linkedin.svg" alt=""><strong>LinkedIn</strong></div>
+              <div class="message">Hi Maya, I applied for the product design role and noticed your work on the design system...</div>
+              <div class="channel-status">Queued with your permission</div>
+            </div>
+            <div class="channel">
+              <div class="channel-head"><img src="./brands/gmail.svg" alt=""><strong>Gmail</strong></div>
+              <div class="message out">A concise introduction, the role, and the relevant proof of work.</div>
+              <div class="channel-status">Address verified before send</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter flip" data-chapter>
+        <div class="wrap chapter-grid">
+          <span class="chapter-ghost" aria-hidden="true">5</span>
+          <div class="chapter-copy">
+            <h3 class="display" data-split>A reply becomes the next move.</h3>
+            <p>Replies are read and classified: rejections become signal, interview requests and deadlines become structured next steps. When a real interview lands, a prep bundle generates itself, with a company brief, audience-aware questions, and a story bank built from your own experience.</p>
+            <span class="chapter-fine">When a human writes back, automated contact to that person pauses. The conversation is yours.</span>
+          </div>
+          <div class="chapter-visual follow-stage">
+            <div class="follow-node"><img src="./brands/gmail.svg" alt=""><strong>Reply understood</strong><span>Interview request, Tuesday at 2 PM</span></div>
+            <div class="follow-arrow" aria-hidden="true"></div>
+            <div class="follow-node"><img src="./assets/roledesk-app-icon.png" alt=""><strong>Prep generated</strong><span>Company brief, question banks, story bank</span></div>
+            <div class="follow-arrow" aria-hidden="true"></div>
+            <div class="follow-node"><span class="follow-glyph" aria-hidden="true">You</span><strong>You walk in ready</strong><span>The judgment calls were always yours</span></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ACT VI · CONTROL (dark act) -->
+    <section class="control" id="ownership-control">
+      <div class="control-inner">
+        <div class="wrap">
+          <h2 class="display" data-split>Automation that can <em>say no.</em></h2>
+          <p class="control-lede">RoleDesk is built to refuse: it stops whenever identity, permission, cost, or form state is not clear enough to act on truthfully.</p>
+          <div class="mode-rail">
+            <div class="mode-progress" aria-hidden="true"></div>
+            <div class="mode"><h3>Off</h3><p>Nothing starts. Inspect the queue, read the receipts, change the rules.</p></div>
+            <div class="mode"><h3>Rehearse</h3><p>The real form fills end to end and stops at Submit. Every run leaves a receipt.</p></div>
+            <div class="mode"><h3>Armed</h3><p>Only jobs you approved can submit. Consent is re-checked at the click, and arming expires on a timer.</p></div>
+          </div>
+          <div class="guardrails">
+            <div class="guardrail"><strong>Consent is specific and revocable.</strong><p>Applying, emailing, and LinkedIn are three separate grants, default-deny. Rewording a disclosure invalidates the old grant; revocation applies on the next call.</p></div>
+            <div class="guardrail"><span class="big">$5<span style="font-size:.42em">/day</span></span><strong>A hard ceiling on AI spend.</strong><p>Default $5 per day, adjustable from $0.25 to $50. Every AI path counts against it, including autonomous form repair, and work stops at the cap.</p></div>
+            <div class="guardrail"><strong>Blank and flagged, not guessed.</strong><p>Identity, EEO, and work-authorization questions with no answer in your profile are left blank and surfaced to you. Deciding those is not the software's job.</p></div>
+            <div class="guardrail"><strong>Everything is written down.</strong><p>Activity log, per-job timelines, rehearsal receipts, consent history, and every AI call, all visible in the app. Local SQLite and the macOS Keychain; no account, no telemetry.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT VII · PROOF -->
+    <section class="proof" id="proof" aria-label="Counted honestly">
+      <div class="wrap">
+        <div class="proof-line">
+          <div><b data-count data-count-to="28">28</b><span>discovery source modules across boards and direct ATS feeds</span></div>
+          <div><b data-count data-count-to="16">16</b><span>automated apply flows; 18 ATS platforms recognized</span></div>
+          <div><b data-count data-count-to="3">3</b><span>AI providers, routed per task with your own keys</span></div>
+          <div><b>0</b><span>accounts, servers in the data path, or telemetry SDKs</span></div>
+        </div>
+        <div class="proof-honesty">
+          <h2>It does not promise a job.</h2>
+          <p>RoleDesk removes the repeated work and keeps the record legible. The choices, the conversations, and the outcome remain yours.</p>
+        </div>
+        <p class="proof-foot">Figures come from the shipped code inventory; partial and dormant features are excluded from every count.</p>
+      </div>
+    </section>
+
+    <!-- ACT VIII · BEYOND THE QUEUE -->
+    <section class="depth" id="workspace-depth">
+      <div class="wrap">
+        <div class="depth-head">
+          <h2 class="display" data-split>Every job leaves a map.</h2>
+          <p>Beyond the daily queue, RoleDesk connects each application to the people around it, the evidence behind it, and what the outcome should teach your next move.</p>
+        </div>
+        <div class="depth-grid">
+          <aside class="depth-core">
+            <strong>One job. The whole trail.</strong>
+            <small>What happened, who was involved, what was submitted, and what to change next.</small>
+          </aside>
+          <div class="depth-features">
+            <article class="depth-feature"><h3>People Map</h3><p>Who was researched for each job, why they mattered, the channel used, and where every conversation stands.</p></article>
+            <article class="depth-feature"><h3>Apply Map</h3><p>Each application and rehearsal with its ATS, field trail, answers, receipt, and submission status.</p></article>
+            <article class="depth-feature"><h3>Referral radar</h3><p>Your imported contacts, cross-referenced against every discovered job, so "you know someone here" never goes unnoticed.</p></article>
+            <article class="depth-feature"><h3>Patterns</h3><p>Outcomes compared by keywords, resume variants, sources, and timing, turned into concrete recommendations.</p></article>
+            <article class="depth-feature"><h3>Strategy</h3><p>A morning summary and an AI coach that reads your own funnel and suggests where the search goes next.</p></article>
+            <article class="depth-feature">
+              <h3>Also inside</h3>
+              <div class="depth-more"><span>Documents</span><span>Messages</span><span>Inbox</span><span>Contacts</span><span>Resume Review</span><span>Interview Prep</span><span>Activity Log</span><span>Exceptions</span></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WAITLIST -->
+    <section class="waitlist" id="waitlist">
+      <div class="wrap waitlist-grid">
+        <div><h2 class="display" data-split>Make room for better decisions.</h2></div>
+        <div class="waitlist-side">
+          <p>Join the RoleDesk waitlist for launch updates and early access on macOS.</p>
+          <form class="waitlist-form" id="waitlist-form" data-waitlist-endpoint="" novalidate>
+            <div class="field">
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="form-message" required>
+            </div>
+            <button class="button button-primary" type="submit">Join waitlist <span class="arrow" aria-hidden="true">&#8599;</span></button>
+          </form>
+          <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+          <p class="privacy-note">The form activates when the waitlist endpoint is connected. No email is stored by this static preview.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <a class="brand" href="#top" aria-label="Back to RoleDesk home"><img src="./assets/roledesk-app-icon.png" width="32" height="32" alt="" loading="lazy"><span>RoleDesk</span></a>
+      <small>Local macOS career operations<br>&copy; <span id="year">2026</span> RoleDesk</small>
+    </div>
+  </footer>
+
+  <script>
+  window.addEventListener("DOMContentLoaded", () => {
+    "use strict";
+    const $  = (s, c) => (c || document).querySelector(s);
+    const $$ = (s, c) => [...(c || document).querySelectorAll(s)];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const hasGsap = () => window.gsap && window.ScrollTrigger;
+
+    $("#year").textContent = new Date().getFullYear();
+
+    /* ---------- waitlist form (contract unchanged: POST FormData {email}) ---------- */
+    const form = $("#waitlist-form"), input = $("#email"), message = $("#form-message");
+    const submit = form.querySelector('button[type="submit"]');
+    const endpoint = form.dataset.waitlistEndpoint;
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      input.removeAttribute("aria-invalid");
+      message.dataset.state = "";
+      if (!input.validity.valid) {
+        input.setAttribute("aria-invalid", "true");
+        message.dataset.state = "error";
+        message.textContent = "Enter a valid email address.";
+        input.focus();
+        return;
+      }
+      if (!endpoint) {
+        message.dataset.state = "error";
+        message.textContent = "The waitlist connection is not live yet. Please check back soon.";
+        return;
+      }
+      submit.disabled = true;
+      form.setAttribute("aria-busy", "true");
+      message.textContent = "Adding you to the waitlist...";
+      try {
+        const response = await fetch(endpoint, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
+        if (!response.ok) throw new Error("Waitlist request failed");
+        message.textContent = "You are on the list. We will be in touch.";
+        form.reset();
+      } catch {
+        message.dataset.state = "error";
+        message.textContent = "We could not add you right now. Please try again soon.";
+      } finally {
+        submit.disabled = false;
+        form.removeAttribute("aria-busy");
+      }
+    });
+
+    /* ---------- product demo (works with or without GSAP) ---------- */
+    const demoShots = $$(".demo-shot"), demoTabs = $$(".demo-tab"), demoPanels = $$(".demo-data-panel");
+    const demoProgress = $(".demo-progress span"), demoShell = $(".demo-shell"), demoData = $(".demo-data");
+    let activeDemo = 0, demoCycle = null, demoTimer = null, demoManual = false;
+    const scheduleDemo = () => {
+      if (reduceMotion || demoManual) return;
+      if (hasGsap()) {
+        demoCycle && demoCycle.kill();
+        gsap.set(demoProgress, { scaleX: 0 });
+        demoCycle = gsap.to(demoProgress, { scaleX: 1, duration: 5.2, ease: "none", onComplete: () => showDemo(activeDemo + 1, true) });
+      } else {
+        clearTimeout(demoTimer);
+        demoTimer = setTimeout(() => showDemo(activeDemo + 1, false), 5200);
+      }
+    };
+    const showDemo = (next, animate) => {
+      next = (next + demoShots.length) % demoShots.length;
+      const previous = activeDemo;
+      activeDemo = next;
+      demoTabs.forEach((tab, i) => {
+        tab.setAttribute("aria-selected", String(i === next));
+        tab.tabIndex = i === next ? 0 : -1;
+      });
+      demoPanels.forEach((panel, i) => { panel.hidden = i !== next; });
+      if (next === previous) { scheduleDemo(); return; }
+      if (!animate || reduceMotion || !hasGsap()) {
+        demoShots.forEach((shot, i) => {
+          shot.classList.toggle("is-active", i === next);
+          shot.style.opacity = i === next ? "1" : "0";
+          shot.style.visibility = i === next ? "visible" : "hidden";
+        });
+        scheduleDemo();
+        return;
+      }
+      const oldShot = demoShots[previous], newShot = demoShots[next], newPanel = demoPanels[next];
+      newShot.classList.add("is-active");
+      gsap.killTweensOf([oldShot, newShot, newPanel]);
+      gsap.set(newShot, { autoAlpha: 0, scale: 1.012 });
+      gsap.fromTo(newPanel, { y: 5, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .45, ease: "power4.out" });
+      gsap.to(oldShot, { autoAlpha: 0, scale: .992, duration: .42, ease: "power3.in", onComplete: () => oldShot.classList.remove("is-active") });
+      gsap.to(newShot, { autoAlpha: 1, scale: 1, duration: .72, ease: "power4.out", delay: .14 });
+      scheduleDemo();
+    };
+    /* a user click takes over: the auto-cycle stops for good, and only then do
+       panel changes announce (so screen readers never hear the timer's rotation) */
+    const takeManualControl = index => {
+      demoManual = true;
+      demoCycle && demoCycle.kill();
+      clearTimeout(demoTimer);
+      if (hasGsap()) gsap.set(demoProgress, { scaleX: 0 });
+      demoData.setAttribute("aria-live", "polite");
+      showDemo(index, true);
+    };
+    demoTabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => takeManualControl(i));
+      tab.addEventListener("keydown", e => {
+        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+        e.preventDefault();
+        const delta = e.key === "ArrowRight" ? 1 : -1;
+        const next = (i + delta + demoTabs.length) % demoTabs.length;
+        takeManualControl(next);
+        demoTabs[next].focus();
+      });
+    });
+    demoShell.addEventListener("mouseenter", () => demoCycle && demoCycle.pause());
+    demoShell.addEventListener("mouseleave", () => { if (!demoManual) demoCycle && demoCycle.resume(); });
+    if (!reduceMotion) scheduleDemo();
+
+    /* ---------- hero laptop screen slow cycle ---------- */
+    const heroShots = $$(".hero-shot");
+    let heroIndex = 0;
+    if (!reduceMotion && heroShots.length > 1) {
+      setInterval(() => {
+        const prev = heroShots[heroIndex];
+        heroIndex = (heroIndex + 1) % heroShots.length;
+        const next = heroShots[heroIndex];
+        if (hasGsap()) {
+          gsap.to(prev, { autoAlpha: 0, duration: .8, ease: "power2.inOut" });
+          gsap.to(next, { autoAlpha: 1, duration: .8, ease: "power2.inOut" });
+        } else {
+          prev.classList.remove("is-on");
+          next.classList.add("is-on");
+          prev.style.opacity = "0";
+          next.style.opacity = "1";
+        }
+      }, 4500);
+    }
+
+    /* ---------- everything below is motion-only enhancement ---------- */
+    if (reduceMotion || !hasGsap()) return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* split [data-split] into masked words; keeps <em> accents; a11y label preserved */
+    const splitWords = el => {
+      el.setAttribute("aria-label", el.textContent.replace(/\s+/g, " ").trim());
+      const frag = document.createDocumentFragment();
+      const process = (node, acc) => {
+        if (node.nodeType === 3) {
+          node.textContent.split(/(\s+)/).forEach(tok => {
+            if (!tok) return;
+            if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(" ")); return; }
+            const w = document.createElement("span");
+            w.className = "w" + (acc ? " acc" : "");
+            w.setAttribute("aria-hidden", "true");
+            const wi = document.createElement("span");
+            wi.className = "wi";
+            wi.textContent = tok;
+            w.appendChild(wi);
+            frag.appendChild(w);
+          });
+        } else if (node.nodeType === 1) {
+          [...node.childNodes].forEach(n => process(n, acc || node.tagName === "EM"));
+        }
+      };
+      [...el.childNodes].forEach(n => process(n, false));
+      el.textContent = "";
+      el.appendChild(frag);
+      return $$(".wi", el);
+    };
+
+    const start = () => {
+      const mm = gsap.matchMedia();
+      const splitTargets = new Map();
+      $$("[data-split]").forEach(el => splitTargets.set(el, splitWords(el)));
+
+      /* word reveals: hero heading on load, pile-up lines inside their own scrub,
+         everything else on scroll-enter */
+      const heroWords = [];
+      $("#top") && $$("[data-split]", $("#top")).forEach(el => heroWords.push(...(splitTargets.get(el) || [])));
+      splitTargets.forEach((words, el) => {
+        if (el.closest("#top") || el.closest(".pileup")) return;
+        gsap.set(words, { yPercent: 112 });
+        ScrollTrigger.create({
+          trigger: el, start: "top 88%", once: true,
+          onEnter: () => gsap.to(words, { yPercent: 0, duration: .9, stagger: .035, ease: "power4.out", overwrite: "auto" })
+        });
+      });
+      if (heroWords.length) gsap.fromTo(heroWords, { yPercent: 112 }, { yPercent: 0, duration: 1, stagger: .05, ease: "power4.out", delay: .1 });
+      gsap.from(".hero-lede, .hero-actions", { y: 22, autoAlpha: 0, duration: .8, stagger: .1, ease: "power3.out", delay: .45 });
+
+      /* count-ups: zeroed at init so the final value never flashes pre-trigger */
+      $$("[data-count]").forEach(el => {
+        const to = parseFloat(el.dataset.countTo || el.textContent);
+        const prefix = el.dataset.countPrefix || "";
+        const obj = { v: 0 };
+        el.textContent = prefix + "0";
+        ScrollTrigger.create({
+          trigger: el, start: "top 92%", once: true,
+          onEnter: () => gsap.to(obj, {
+            v: to, duration: 1.4, ease: "power2.out",
+            onUpdate: () => { el.textContent = prefix + Math.round(obj.v); }
+          })
+        });
+      });
+
+      mm.add("(min-width: 1081px)", () => {
+        /* ACT I · hero: laptop closes-to-open scrub */
+        const stage = $(".macbook-stage"), macOpen = $(".mac-open"), macLid = $(".mac-lid"), shade = $(".screen-shade");
+        gsap.from(".hero-stage", { y: 30, autoAlpha: 0, duration: 1, ease: "power4.out", delay: .3 });
+        /* every property opens with a hold tween (immediateRender:true, from
+           equals to) so the closed state is owned by the scrub at playhead 0
+           and survives refreshes, late init, and backward scrubbing.
+           Sequence: closed top-view photo fades into the open assembly with
+           the lid folded down (rotationX -70), the lid swings up around the
+           hinge, and the screen wakes as it rises. */
+        gsap.timeline({
+          scrollTrigger: { trigger: ".hero", start: "top top", end: "+=130%", scrub: 1, pin: ".hero-pin", invalidateOnRefresh: true }
+        })
+          .fromTo(stage, { "--closed-alpha": 1, scale: 1 }, { "--closed-alpha": 1, scale: 1.03, duration: .28, ease: "power2.inOut" }, 0)
+          .fromTo(macOpen, { autoAlpha: 0 }, { autoAlpha: 0, duration: .26 }, 0)
+          .fromTo(macLid, { rotationX: -70 }, { rotationX: -70, duration: .32 }, 0)
+          .fromTo(shade, { opacity: 1 }, { opacity: 1, duration: .48 }, 0)
+          .fromTo(macOpen, { autoAlpha: 0 }, { autoAlpha: 1, duration: .16, immediateRender: false }, .26)
+          .fromTo(stage, { "--closed-alpha": 1 }, { "--closed-alpha": 0, duration: .14, immediateRender: false }, .3)
+          .fromTo(macLid, { rotationX: -70 }, { rotationX: 0, duration: .44, ease: "power2.out", immediateRender: false }, .32)
+          .fromTo(shade, { opacity: 1 }, { opacity: 0, duration: .26, immediateRender: false }, .48)
+          .fromTo(stage, { scale: 1.03 }, { scale: 1, duration: .34, ease: "power3.out", immediateRender: false }, .42)
+          .to({}, { duration: .22 }, .78);
+
+        /* ACT II · pile-up: line 1 assembles, slips accumulate, line 2 lands last.
+           All tweens are explicit fromTo: .from() inside a scrubbed timeline
+           re-captures its end state as the from state on refresh and freezes. */
+        const slips = $$(".slip");
+        const lineWords = n => {
+          const out = [];
+          $$(n).forEach(el => { const w = splitTargets.get(el); if (w) out.push(...w); });
+          return out;
+        };
+        const line1Words = lineWords(".pileup-head [data-split]:not(.pileup-line-2)");
+        const line2Words = lineWords(".pileup-line-2");
+        const pileTl = gsap.timeline({
+          scrollTrigger: { trigger: ".pileup", start: "top top", end: "+=220%", scrub: 1, pin: ".pileup-pin", invalidateOnRefresh: true }
+        });
+        if (line1Words.length) {
+          /* line 1 assembles on approach, before the pin, so the pinned
+             viewport is never blank */
+          gsap.set(line1Words, { yPercent: 112 });
+          ScrollTrigger.create({
+            trigger: ".pileup", start: "top 70%", once: true,
+            onEnter: () => gsap.to(line1Words, { yPercent: 0, duration: .9, stagger: .05, ease: "power4.out" })
+          });
+        }
+        slips.forEach((slip, i) => {
+          const rot = parseFloat(slip.dataset.rot || "0");
+          pileTl.fromTo(slip,
+            { y: i % 2 ? 260 : 340, x: (i % 3 - 1) * 120, rotation: i % 2 ? 22 : -26, autoAlpha: 0 },
+            { y: 0, x: 0, rotation: rot, autoAlpha: 1, duration: .5, ease: "power2.out" },
+            .1 + i * .32);
+        });
+        if (line2Words.length) {
+          gsap.set(line2Words, { yPercent: 112 });
+          pileTl.fromTo(line2Words, { yPercent: 112 }, { yPercent: 0, duration: .6, stagger: .05, ease: "power4.out" }, .1 + slips.length * .32 + .15);
+        }
+
+        /* ACT III · sticky-stack: covered cards recede */
+        const cards = $$(".market-card");
+        cards.forEach((card, i) => {
+          const next = cards[i + 1];
+          if (!next) return;
+          /* explicit fromTo: tweening filter from an unset value makes GSAP
+             interpolate brightness from 0, flashing the card black */
+          gsap.fromTo(card,
+            { scale: 1, filter: "brightness(1)" },
+            { scale: .955, filter: "brightness(.93)", ease: "none",
+              scrollTrigger: { trigger: next, start: "top 85%", end: "top 25%", scrub: true } });
+        });
+
+        /* ACT V · chapter visual micro-motion */
+        gsap.from(".brand-node", { y: 24, autoAlpha: 0, duration: .6, stagger: .06, ease: "power4.out",
+          scrollTrigger: { trigger: ".brand-field", start: "top 82%", once: true } });
+        gsap.from(".evidence-check", { x: -16, autoAlpha: 0, duration: .5, stagger: .12, ease: "power3.out",
+          scrollTrigger: { trigger: ".job-sheet", start: "top 78%", once: true } });
+        gsap.from(".diff-line.changed", { scaleX: 0, transformOrigin: "left", duration: .7, stagger: .2, ease: "power3.out",
+          scrollTrigger: { trigger: ".diff-strip", start: "top 88%", once: true } });
+        gsap.from(".browser-fill i", { scaleX: 0, duration: .9, stagger: .14, ease: "power3.out",
+          scrollTrigger: { trigger: ".browser-story", start: "top 74%", once: true } });
+        gsap.from(".message", { y: 16, autoAlpha: 0, duration: .6, stagger: .18, ease: "power3.out",
+          scrollTrigger: { trigger: ".channel-map", start: "top 78%", once: true } });
+        gsap.from(".follow-arrow", { scaleX: 0, duration: .6, stagger: .2, ease: "power3.out",
+          scrollTrigger: { trigger: ".follow-stage", start: "top 78%", once: true } });
+        gsap.from(".follow-node", { y: 20, autoAlpha: 0, duration: .6, stagger: .16, ease: "power4.out",
+          scrollTrigger: { trigger: ".follow-stage", start: "top 78%", once: true } });
+
+        /* ACT VI · mode rail lights Off -> Rehearse -> Armed */
+        gsap.fromTo(".mode-progress", { scaleX: 0 }, { scaleX: 1, ease: "none",
+          scrollTrigger: { trigger: ".mode-rail", start: "top 75%", end: "bottom 40%", scrub: true } });
+        gsap.from(".mode", { y: 22, autoAlpha: 0, duration: .6, stagger: .22, ease: "power3.out",
+          scrollTrigger: { trigger: ".mode-rail", start: "top 78%", once: true } });
+        gsap.from(".guardrail", { y: 24, autoAlpha: 0, duration: .6, stagger: .1, ease: "power4.out",
+          scrollTrigger: { trigger: ".guardrails", start: "top 82%", once: true } });
+
+        /* gentle lift for remaining composed blocks */
+        $$(".depth-feature, .proof-honesty, .depth-core").forEach(el => {
+          gsap.from(el, { y: 26, autoAlpha: 0, duration: .7, ease: "power4.out",
+            scrollTrigger: { trigger: el, start: "top 88%", once: true } });
+        });
+      });
+
+      mm.add("(max-width: 1080px)", () => {
+        /* light reveals only; no pins on small screens */
+        $$(".slip, .market-card, .brand-node, .guardrail, .depth-feature").forEach(el => {
+          gsap.from(el, { y: 18, autoAlpha: 0, duration: .55, ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 92%", once: true } });
+        });
+      });
+
+      window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
+    };
+
+    /* split after fonts load so word wrapping is measured on the real faces */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
+    else start();
+  });
+  </script>
+</body>
+</html>
