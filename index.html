@@ -828,7 +828,7 @@
         <div><h2 class="display" data-split>Make room for better decisions.</h2></div>
         <div class="waitlist-side">
           <p>Join the RoleDesk waitlist for launch updates and early access on macOS.</p>
-          <form class="waitlist-form" id="waitlist-form" data-waitlist-endpoint="" novalidate>
+          <form class="waitlist-form" id="waitlist-form" data-waitlist-endpoint="https://api.getroledesk.com/api/waitlist" novalidate>
             <div class="field">
               <label for="email">Email address</label>
               <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="form-message" required>
@@ -859,7 +859,10 @@
 
     $("#year").textContent = new Date().getFullYear();
 
-    /* ---------- waitlist form (contract unchanged: POST FormData {email}) ---------- */
+    /* waitlist form: POSTs JSON {email} to the Spring Boot API, which always
+       returns {status, message} JSON (200/400/429/500) - surface its own
+       message rather than a hardcoded one, since it already carries the
+       right copy for validation and rate-limit responses. */
     const form = $("#waitlist-form"), input = $("#email"), message = $("#form-message");
     const submit = form.querySelector('button[type="submit"]');
     const endpoint = form.dataset.waitlistEndpoint;
@@ -883,9 +886,18 @@
       form.setAttribute("aria-busy", "true");
       message.textContent = "Adding you to the waitlist...";
       try {
-        const response = await fetch(endpoint, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
-        if (!response.ok) throw new Error("Waitlist request failed");
-        message.textContent = "You are on the list. We will be in touch.";
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ email: input.value.trim() })
+        });
+        const body = await response.json().catch(() => null);
+        if (!response.ok) {
+          message.dataset.state = "error";
+          message.textContent = body?.message || "We could not add you right now. Please try again soon.";
+          return;
+        }
+        message.textContent = body?.message || "You are on the list. We will be in touch.";
         form.reset();
       } catch {
         message.dataset.state = "error";
